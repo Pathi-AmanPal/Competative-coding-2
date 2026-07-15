@@ -1,0 +1,130 @@
+Binary search is used when searching in a sorted order DS
+- Time complexity : (log n) with base 2
+binary search
+- mid =  f + (e-f)/2
+- if (target != ds[mid]) 
+	if (mid > target) e = index - 1 of mid
+		binary search
+	else l = index + 1 of mid
+		binary search
+- else 
+	print("found at index", mid)
+class Solution {
+    public int search(int[] nums, int target) {
+        int start = 0, end = nums.length - 1;
+
+        while (start <= end) {
+            int mid = start + (end - start) / 2;
+
+            if (nums[mid] == target) return mid;
+
+            // Check if left part is sorted
+            if (nums[mid] >= nums[start]) {
+                if (target >= nums[start] && target < nums[mid]) {
+                    end = mid - 1; // move left
+                } else {
+                    start = mid + 1; // move right
+                }
+            } 
+            // Right part is sorted
+            else {
+                if (target > nums[mid] && target <= nums[end]) {
+                    start = mid + 1; // move right
+                } else {
+                    end = mid - 1; // move left
+                }
+            }
+        }
+
+        return -1;
+    }
+}
+
+
+Hello Class,
+As we discussed in today's class, you are required to solve the following 3 problems:
+2 problems on Prefix & Suffix Arrays
+Prefix Sum Range Query | Practice | GeeksforGeeks
+https://leetcode.com/problems/product-of-array-except-self/description/
+1 problem on Duplicacy
+https://leetcode.com/problems/contains-duplicate-ii/description/
+ 
+Submission Instructions
+Step 1: Solve on LeetCode/ GeeksforGeeks  etc.
+Submit your solution on LeetCode/GeeksforGeeks. try to solve each problem in the following progression:
+Brute Force Solution
+Optimal Solution
+Most Optimal Solution (if a better approach exists)
+This will help you understand how to optimize your logic step by step.
+Step 2: Upload to GitHub
+After successfully submitting your solution on LeetCode/GeeksforGeeks, upload it to your GitHub repository.
+Do NOT upload only the code. For every problem, create a well-structured README or markdown file in the following format:
+ 
+Problem Name
+1. Intuition
+Explain your initial thought process.
+Why did you choose this approach?
+2. Approach
+Explain the algorithm step by step.
+Mention the time and space complexity.
+3. Code
+Paste your final accepted solution.
+Important
+Complete the LeetCode/GeeksforGeeks submission before uploading to GitHub.
+Ensure your GitHub repository is public or accessible.
+
+While solving each problem, try to write modular and clean code instead of writing everything inside the solve() function or main().
+Use separate functions wherever applicable.
+ 
+For Example :
+C++
+#include <bits/stdc++.h>
+using namespace std;
+// Build Prefix Array
+vector<int> buildPrefixArray(vector<int>& nums) {
+    int n = nums.size();
+    vector<int> prefix(n);
+    prefix[0] = nums[0];
+    for (int i = 1; i < n; i++) {
+        prefix[i] = prefix[i - 1] + nums[i];
+    }
+    return prefix;
+}
+// Build Suffix Array
+vector<int> buildSuffixArray(vector<int>& nums) {
+    int n = nums.size();
+    vector<int> suffix(n);
+    suffix[n - 1] = nums[n - 1];
+    for (int i = n - 2; i >= 0; i--) {
+        suffix[i] = suffix[i + 1] + nums[i];
+    }
+    return suffix;
+}
+// Main Logic
+void solveProblem(vector<int>& nums) {
+    vector<int> prefix = buildPrefixArray(nums);
+    vector<int> suffix = buildSuffixArray(nums);
+    cout << "Prefix Array: ";
+    for (int x : prefix){
+        cout << x << " ";
+    }
+    cout << "\nSuffix Array: ";
+    for (int x : suffix){
+        cout << x << " ";
+    }
+}
+// Driver Code
+int main() {
+    vector<int> nums = {1, 2, 3, 4, 5};
+    solveProblem(nums);
+    return 0;
+}
+ 
+ 
+This will help and improve:
+Code readability
+Code reusability
+Debugging
+Interview coding style
+
+Thank You, Happy Coding
