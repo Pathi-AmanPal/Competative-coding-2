@@ -1,0 +1,157 @@
+================================================================================
+TREE & BFS LEVEL ORDER TRAVERSAL PROBLEMS - APPROACHES & COMPLEXITY ANALYSIS
+================================================================================
+
+--------------------------------------------------------------------------------
+1. LEETCODE 102 - BINARY TREE LEVEL ORDER TRAVERSAL
+--------------------------------------------------------------------------------
+BRUTE FORCE APPROACH:
+- Approach: Use recursive Depth First Search (DFS). Pass current depth/level as a parameter. At each node, check if the output list has a sublist for that depth; if not, create one, then append node.val to the list corresponding to depth.
+- Time Complexity: O(N) where N is total number of nodes.
+- Space Complexity: O(H) auxiliary space for recursion call stack (H = height of tree, up to O(N) for skewed tree), plus output storage O(N).
+
+OPTIMAL APPROACH:
+- Approach: Use iterative Breadth First Search (BFS) with a Queue. For each iteration of the outer loop, record levelSize = queue.size(). Poll levelSize nodes from the queue, collect their values in a level list, and push their left and right children into the queue.
+- Time Complexity: O(N) — Every node is enqueued and dequeued exactly once.
+- Space Complexity: O(W) — Max width of tree in queue, which is O(N) in worst case (up to N/2 nodes at lowest level).
+
+
+--------------------------------------------------------------------------------
+2. LEETCODE 103 - BINARY TREE ZIGZAG LEVEL ORDER TRAVERSAL
+--------------------------------------------------------------------------------
+BRUTE FORCE APPROACH:
+- Approach: Perform standard BFS level order traversal. Store elements of each level in a standard list, and after constructing each level list, reverse the list for odd levels using Collections.reverse().
+- Time Complexity: O(N) — Reversing each level list takes linear time proportional to level size, summing to O(N) total.
+- Space Complexity: O(W) — Space needed for the BFS queue.
+
+OPTIMAL APPROACH:
+- Approach: Perform BFS using a Queue for nodes and a double-ended queue (LinkedList) for each level's values. Maintain a boolean flag leftToRight. If leftToRight is true, append elements using addLast(); if false, prepend elements using addFirst(). Toggle the flag after each level.
+- Time Complexity: O(N) — Direct placement at front or back of deque takes O(1) per node.
+- Space Complexity: O(W) — Space required for the BFS queue.
+
+
+--------------------------------------------------------------------------------
+3. LEETCODE 107 - BINARY TREE LEVEL ORDER TRAVERSAL II
+--------------------------------------------------------------------------------
+BRUTE FORCE APPROACH:
+- Approach: Perform standard top-down BFS level order traversal storing results in an ArrayList of lists. After finishing BFS, reverse the entire outer list using Collections.reverse().
+- Time Complexity: O(N) — Standard BFS takes O(N) time and reversing the result list of height H takes O(H) time.
+- Space Complexity: O(W) — Space for the BFS queue.
+
+OPTIMAL APPROACH:
+- Approach: Perform top-down BFS using a LinkedList for the result. At each level, process nodes using queue.size() and insert the newly constructed level list directly at index 0 of the result list (result.add(0, currentLevel)).
+- Time Complexity: O(N) — Prepending level list takes O(1) pointer updates per level.
+- Space Complexity: O(W) — Space for the BFS queue.
+
+
+--------------------------------------------------------------------------------
+4. LEETCODE 199 - BINARY TREE RIGHT SIDE VIEW
+--------------------------------------------------------------------------------
+BRUTE FORCE APPROACH:
+- Approach: Perform full BFS level order traversal, collecting all nodes at every level into lists. For each level list, pick the last element (rightmost element) and add it to the final result array.
+- Time Complexity: O(N) — Visits all N nodes and stores every node in level lists.
+- Space Complexity: O(N) — Auxiliary memory for storing all node values level by level.
+
+OPTIMAL APPROACH:
+- Approach: Recursive DFS prioritizing right subtrees over left subtrees (Root -> Right -> Left). Track current depth. When depth == result.size(), the current node is the first node encountered at this level (the rightmost node), so add node.val to result.
+- Time Complexity: O(N) — Visits each node at most once.
+- Space Complexity: O(H) — Recursion stack depth equal to tree height H (O(log N) balanced, O(N) worst-case skewed).
+
+
+--------------------------------------------------------------------------------
+5. LEETCODE 515 - FIND LARGEST VALUE IN EACH TREE ROW
+--------------------------------------------------------------------------------
+BRUTE FORCE APPROACH:
+- Approach: Perform full level order traversal collecting all nodes of each row in lists. Then iterate over each row list to find the maximum value.
+- Time Complexity: O(N) — Passes over all nodes twice (once during BFS, once during row max scanning).
+- Space Complexity: O(N) — Storing full level lists for every row.
+
+OPTIMAL APPROACH:
+- Approach: Standard BFS level order traversal. Maintain a single variable maxVal initialized to Integer.MIN_VALUE for each level. As nodes of the level are dequeued, update maxVal = Math.max(maxVal, node.val) on-the-fly, then append maxVal to result.
+- Time Complexity: O(N) — Single pass over all nodes.
+- Space Complexity: O(W) — Queue size proportional to tree width.
+
+
+--------------------------------------------------------------------------------
+6. LEETCODE 637 - AVERAGE OF LEVELS IN BINARY TREE
+--------------------------------------------------------------------------------
+BRUTE FORCE APPROACH:
+- Approach: Perform BFS level order traversal, building a List<List<Integer>> storing all elements per level. Then iterate through each level list, sum the values, and divide by size.
+- Time Complexity: O(N) — Visits nodes during traversal and again during average calculation.
+- Space Complexity: O(N) — Stores all tree elements in level lists.
+
+OPTIMAL APPROACH:
+- Approach: Standard BFS level order traversal. Accumulate sum in a single double variable as nodes are dequeued for current level, then calculate sum / levelSize and add to result.
+- Time Complexity: O(N) — Single pass over nodes.
+- Space Complexity: O(W) — Queue size proportional to max tree width.
+
+
+--------------------------------------------------------------------------------
+7. LEETCODE 116 - POPULATING NEXT RIGHT POINTERS IN EACH NODE
+--------------------------------------------------------------------------------
+BRUTE FORCE APPROACH:
+- Approach: Perform standard BFS using a Queue. For each level, iterate through nodes and set node.next = nextNodeInQueue, setting the last node's next to null.
+- Time Complexity: O(N) — Visits every node once.
+- Space Complexity: O(W) = O(N) — Queue stores up to N/2 leaf nodes.
+
+OPTIMAL APPROACH:
+- Approach: Leverage the perfect binary tree property and previously connected next pointers. Traverse level by level starting at leftmost node. For current node, set curr.left.next = curr.right. If curr.next != null, set curr.right.next = curr.next.left. Then move curr = curr.next.
+- Time Complexity: O(N) — Visits every node and updates pointers in linear time.
+- Space Complexity: O(1) — No queue or recursion stack needed.
+
+
+--------------------------------------------------------------------------------
+8. LEETCODE 117 - POPULATING NEXT RIGHT POINTERS IN EACH NODE II
+--------------------------------------------------------------------------------
+BRUTE FORCE APPROACH:
+- Approach: Perform BFS level order traversal using a Queue. Connect adjacent nodes in queue at the same level: node.next = queue.peek() (for all except last node in level).
+- Time Complexity: O(N) — Dequeues all nodes and sets next pointers.
+- Space Complexity: O(W) — Queue stores nodes at maximum level width.
+
+OPTIMAL APPROACH:
+- Approach: Use a dummy head node and prev pointer for the next level while iterating across current level's next pointers. For curr node, if left/right exists, link prev.next = child and advance prev. After finishing level, jump curr = dummy.next.
+- Time Complexity: O(N) — Each node visited once.
+- Space Complexity: O(1) — Uses constant pointer space.
+
+
+--------------------------------------------------------------------------------
+9. LEETCODE 662 - MAXIMUM WIDTH OF BINARY TREE
+--------------------------------------------------------------------------------
+BRUTE FORCE APPROACH:
+- Approach: Represent the binary tree as a full array (like a heap) including null nodes, or perform BFS pushing null nodes. Measure level size from first non-null to last non-null node.
+- Time Complexity: O(2^H) — Exponential time due to full tree expansion with null nodes for deep skewed trees.
+- Space Complexity: O(2^H) — Exponential space memory overflow.
+
+OPTIMAL APPROACH:
+- Approach: BFS pairing each node with a 0-based heap index (left child = 2*i + 1, right child = 2*i + 2). At each level, subtract minIndex of level from node index to avoid integer overflow. Width = lastIndex - firstIndex + 1.
+- Time Complexity: O(N) — Visits each node once.
+- Space Complexity: O(W) — Queue size max tree width.
+
+
+--------------------------------------------------------------------------------
+10. LEETCODE 958 - CHECK COMPLETENESS OF A BINARY TREE
+--------------------------------------------------------------------------------
+BRUTE FORCE APPROACH:
+- Approach: Count total nodes N using DFS. In a second DFS pass, assign index 1 to root, 2*i to left child, 2*i + 1 to right child. If any node gets index > N, tree is incomplete.
+- Time Complexity: O(N) — Two DFS passes over the tree.
+- Space Complexity: O(H) — Call stack depth.
+
+OPTIMAL APPROACH:
+- Approach: Single pass BFS using Queue allowing null nodes. Push left and right children regardless of null. Set flag nullSeen = true when null polled. If any non-null node polled after nullSeen is true, return false.
+- Time Complexity: O(N) — Single BFS pass.
+- Space Complexity: O(W) — Queue size proportional to tree width.
+
+
+--------------------------------------------------------------------------------
+11. LEETCODE 1609 - EVEN ODD TREE
+--------------------------------------------------------------------------------
+BRUTE FORCE APPROACH:
+- Approach: BFS level order traversal storing node values of each level into a List. Then iterate through each list to verify parity and strict increasing/decreasing order.
+- Time Complexity: O(N) — Traverses tree nodes and scans level lists.
+- Space Complexity: O(N) — Stores all level lists.
+
+OPTIMAL APPROACH:
+- Approach: Single pass BFS. Maintain prevVal initialized to Integer.MIN_VALUE for even levels and Integer.MAX_VALUE for odd levels. On-the-fly validate parity (odd value for even level, even value for odd level) and strict inequality (val > prevVal for even level, val < prevVal for odd level).
+- Time Complexity: O(N) — Single pass over nodes.
+- Space Complexity: O(W) — Queue size max tree width.
+================================================================================
