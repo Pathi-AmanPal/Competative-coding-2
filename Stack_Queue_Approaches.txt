@@ -1,0 +1,39 @@
+================================================================================
+STACK & QUEUE PROBLEMS - APPROACHES & COMPLEXITY ANALYSIS
+================================================================================
+
+--------------------------------------------------------------------------------
+1. LEETCODE 84 - LARGEST RECTANGLE IN HISTOGRAM
+--------------------------------------------------------------------------------
+BRUTE FORCE APPROACH:
+- Approach: For every possible bar i, expand outward to the left and right as far as possible while adjacent bars have height >= heights[i]. Find the left boundary index L and right boundary index R, then compute width = R - L + 1 and area = heights[i] * width. Alternatively, generate all possible pairs of indices (i, j), track min height between them, and compute minHeight * (j - i + 1).
+- Time Complexity: O(N^2) for single-bar expansion (or O(N^3) for naive pair calculation).
+- Space Complexity: O(1) auxiliary space.
+
+OPTIMAL APPROACH:
+- Approach: Monotonic Increasing Stack. Iterate through indices from 0 to N (with heights[N] = 0 as a sentinel). The stack stores indices of bars in strictly increasing height order. When currentHeight < heights[stack.peek()], pop top index hIdx (this is the height of the rectangle). The right boundary (Next Smaller Element) is current index i, and left boundary (Previous Smaller Element) is new stack.peek() (or -1 if stack is empty). Calculate width = stack.isEmpty() ? i : i - stack.peek() - 1, area = height * width, and update maxArea.
+- Time Complexity: O(N) — Every index is pushed and popped at most once.
+- Space Complexity: O(N) — Stack stores at most N indices.
+
+
+--------------------------------------------------------------------------------
+2. LEETCODE 232 - IMPLEMENT QUEUE USING STACKS
+--------------------------------------------------------------------------------
+BRUTE FORCE APPROACH:
+- Approach: Use two stacks (stk1 and stk2). On every push(x), pop all elements from stk1 into stk2, push x into stk1, and then pop all elements from stk2 back into stk1. This ensures that the oldest element is always at the top of stk1, making pop() and peek() O(1), but making push(x) expensive.
+- Time Complexity:
+  - push(x): O(N) — Transfers all elements twice.
+  - pop(): O(1)
+  - peek(): O(1)
+  - empty(): O(1)
+- Space Complexity: O(N) auxiliary space.
+
+OPTIMAL APPROACH:
+- Approach: Two Stacks (input and output). Push new elements into input stack in O(1) time. When pop() or peek() is called, if output stack is empty, transfer all elements from input to output stack (which reverses their order to FIFO). Then pop or peek from output stack.
+- Time Complexity:
+  - push(x): O(1)
+  - pop(): Amortized O(1) — Each element is pushed and popped between stacks at most twice overall.
+  - peek(): Amortized O(1)
+  - empty(): O(1)
+- Space Complexity: O(N) total space across both stacks.
+================================================================================
